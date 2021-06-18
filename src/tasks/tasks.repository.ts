@@ -15,7 +15,7 @@ export class TasksRepository extends Repository<Task> {
 
     if (search) {
       query.andWhere(
-        'LOWER(task.title) LIKE LOWER(:search) OR LOWER(tasks.description) LIKE lOWER(:search)',
+        'LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE lOWER(:search)',
         { search: `%${search}%` },
       );
     }
