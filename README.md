@@ -2,8 +2,7 @@
 
 ## Overview
 
-This Repository is a deliverable that I learn NestJS on Udemy Cource 'NestJS Zero to Hero'.
-
+This Repository is a 'Task Management System' that is the result of my learn of NestJS in Udemy's cource 'NestJS Zero to Hero'.
 
 ## Link
 
