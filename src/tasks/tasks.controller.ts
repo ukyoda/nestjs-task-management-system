@@ -17,6 +17,8 @@ import { TaskStatus } from './tasks-status.enum';
 import { Task } from './task.entity';
 import { TasksService } from './tasks.service';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/auth/user.entity';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
@@ -24,35 +26,44 @@ export class TasksController {
   constructor(private tasksService: TasksService) {}
 
   @Get()
-  async getTasks(@Query() filterDto: GetTasksFilterDto): Promise<Task[]> {
-    if (Object.keys(filterDto).length > 0) {
-      return this.tasksService.getTasksWithFilters(filterDto);
-    } else {
-      return this.tasksService.getAllTasks();
-    }
+  async getTasks(
+    @Query() filterDto: GetTasksFilterDto,
+    @GetUser() user: User,
+  ): Promise<Task[]> {
+    return this.tasksService.getTasks(filterDto, user);
   }
 
   @Get('/:id')
-  async findById(@Param('id') id: string): Promise<Task> {
-    return await this.tasksService.findById(id);
+  async findById(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<Task> {
+    return await this.tasksService.findById(id, user);
   }
 
   @Post()
-  async createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
-    return await this.tasksService.createTask(createTaskDto);
+  async createTask(
+    @Body() createTaskDto: CreateTaskDto,
+    @GetUser() user: User,
+  ): Promise<Task> {
+    return await this.tasksService.createTask(createTaskDto, user);
   }
 
   @Patch('/:id/status')
   async updateStatus(
     @Param('id') id: string,
     @Body() updateTaskStatusDto: UpdateTaskStatusDto,
+    @GetUser() user: User,
   ): Promise<Task> {
     const { status } = updateTaskStatusDto;
-    return this.tasksService.updateStatus(id, status);
+    return this.tasksService.updateStatus(id, status, user);
   }
 
   @Delete('/:id')
-  async deleteById(@Param('id') id: string): Promise<void> {
-    await this.tasksService.deleteTask(id);
+  async deleteById(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<void> {
+    await this.tasksService.deleteTask(id, user);
   }
 }
